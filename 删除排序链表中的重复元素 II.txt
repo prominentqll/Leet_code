@@ -1,0 +1,68 @@
+************************************************************************************
+题目描述：
+给定一个排序链表，删除所有含有重复数字的节点，只保留原始链表中 没有重复出现的数字。
+
+示例 1:
+
+输入: 1->2->3->3->4->4->5
+输出: 1->2->5
+示例 2:
+
+输入: 1->1->1->2->3
+输出: 2->3
+
+
+解题思路：
+用一个指针pre表示到目前为止的最后一个不重复的数字
+用list来遍历链表中的元素，如果出现重复元素，就往后遍历，找不重复的元素
+当找到不重复的元素之后，将pre和该元素连接起来。
+直到list为最后一个元素为止。
+*****************************************************************************************
+
+代码实现：
+struct ListNode 
+{
+	int val;
+	ListNode *next;
+	ListNode(int x) : val(x), next(NULL) {}
+};
+ListNode* deleteDuplicates(ListNode* head)
+{
+	ListNode *list = head;
+	ListNode *pre = nullptr;
+	if (list == nullptr)
+	{
+		return head;
+	}
+	while (list!= nullptr&&list->next!=nullptr)//处理两个及以上元素的情况
+	{
+		if (list->next->val != list->val)
+		{
+			pre = list;
+			list = list->next;
+		}
+		else //出现重复元素
+		{
+			ListNode *ptr = list->next;
+			while (ptr != nullptr&&ptr->val == list->val)
+			{
+				ptr = ptr->next;
+			}
+			if (pre == nullptr)//头部有重复元素
+			{
+				head = ptr;//头结点要进行更新
+				if (head == nullptr)
+				{
+					return nullptr;
+				}
+				list = head;
+			}
+			else
+			{
+				pre->next = ptr;
+				list = pre->next;
+			}
+		}
+	}
+	return head;
+}

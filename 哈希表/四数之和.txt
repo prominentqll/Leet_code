@@ -1,0 +1,69 @@
+********************************************************************************************************
+题目描述：
+给定一个包含 n 个整数的数组 nums 和一个目标值 target，判断 nums 中是否存在四个元素 a，b，c 和 d 。
+使得 a + b + c + d 的值与 target 相等？找出所有满足条件且不重复的四元组。
+
+
+解题思路：
+- 首先将数组从小到大排序
+- 之后先使用双层循环范围为0~size-3的循环确定较小的两个数
+- 剩下的两个数通过设定两个指针头尾扫描右边循环没有遍历倒的数的
+- 在找到一个解之后，因为数组中的数字可能有重复，需要去重
+- 同样的对于外面的双层循环中，在每一次循环末尾也需要判断去重
+*********************************************************************************************************
+代码实现：
+vector<vector<int>> fourSum(vector<int>& nums, int target) 
+{
+        vector<vector<int>> res;
+        // 从小到大对数组进行排序
+        sort(nums.begin(), nums.end());
+        int size = nums.size();
+        int curSum;
+        int start, end;
+        vector<int> save;
+ 
+        for (int i = 0; i < size - 3; i++) {
+            for (int j = i + 1; j < size - 2; j++) {
+                curSum = nums[i] + nums[j];
+                start = j + 1, end = size - 1;
+                // 双指针扫描
+                while (start < end) {
+                    // 找到一个解
+                    if (nums[start] + nums[end] == target - curSum) {
+                        save.clear();
+                        save.push_back(nums[i]);
+                        save.push_back(nums[j]);
+                        save.push_back(nums[start]);
+                        save.push_back(nums[end]);
+                        res.push_back(save);
+                        start++;
+                        end--;
+                         // 去 start 重复
+                        while (start < end && nums[start] == nums[start-1]) {
+                            start++;
+                        }
+                       // 去 end 重复
+                        while (start < end && nums[end] == nums[end+1]) {
+                            end--;
+                        }
+                
+                    } else if (nums[start] + nums[end] > target - curSum) {
+                        end--;
+               
+                    } else {
+                        start++;
+                    }
+                }
+                 // 去 j 重复
+                while (j < size - 2 && nums[j] == nums[j+1]) {
+                    j++;
+                }
+            }
+            // 去 i 重复
+            while (i < size - 3 && nums[i] == nums[i+1]) {
+                i++;
+            }
+        }
+        return res;
+ }
+

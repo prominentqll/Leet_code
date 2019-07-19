@@ -1,0 +1,56 @@
+**********************************************************************************
+题目描述；
+给定一个二叉树，返回其按层次遍历的节点值。 （即逐层地，从左到右访问所有节点）。
+
+例如:
+给定二叉树: [3,9,20,null,null,15,7],
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回其层次遍历结果：
+
+[
+  [3],
+  [9,20],
+  [15,7]
+]
+
+解题思路:
+在访问过程中，我们只需要将同一层中的节点同时入队列即可。
+在将该queue中所有元素出队列的同时，将下一层的元素进队列，完成交接。
+********************************************************************************
+代码实现：
+vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if(root==NULL){
+            return res;
+        }
+         
+        queue<TreeNode*> que;
+        que.push(root);
+        
+        while(!que.empty()){
+            int size=que.size();
+            vector<int> vec;
+            
+            while(size--)
+            {
+                TreeNode* node = que.front();
+                vec.push_back(node->val);
+                que.pop();
+                
+                if(node->left){
+                    que.push(node->left);
+                }
+                 
+                if(node->right){
+                    que.push(node->right);
+                }
+            }
+            res.push_back(vec);
+        }
+        return res;
+    }

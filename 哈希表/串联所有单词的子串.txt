@@ -1,0 +1,102 @@
+*******************************************************************************************************************
+题目描述：
+给定一个字符串 s 和一些长度相同的单词 words。找出 s 中恰好可以由 words 中所有单词串联形成的子串的起始位置。
+
+注意子串要与 words 中的单词完全匹配，中间不能有其他字符，但不需要考虑 words 中单词串联的顺序。
+
+ 
+
+示例 1：
+
+输入：
+  s = "barfoothefoobarman",
+  words = ["foo","bar"]
+输出：[0,9]
+解释：
+从索引 0 和 9 开始的子串分别是 "barfoor" 和 "foobar" 。
+输出的顺序不重要, [9,0] 也是有效答案。
+示例 2：
+
+输入：
+  s = "wordgoodgoodgoodbestword",
+  words = ["word","good","best","word"]
+输出：[]
+
+
+解题思路：
+ 首先利用所有的words总长，在s串中进行截取一段总长长度的子串
+- 每次在s串中从下标i开始截取words总长度的子串。
+- 然而对取得的子串进行拆分为n个word，去匹配words容器中的word
+********************************************************************************************************************
+代码实现：
+vector<int> findSubstring(string s, vector<string>& words)
+    {
+        vector<int>  res;
+        int len = s.length();//主串的长度
+        if (len == 0)
+        {
+            return {};
+        }
+        int words_count= words.size();//单词的个数
+        if (words_count == 0)
+        {
+            return {};
+        }
+        int word_length = words[0].size();//每个单词的长度
+        
+
+        //由于题中要求words中的每个单词的长度必须相等
+        //因此我们必须对words中每个单词的长度进行判断，如果发现不一致，就直接return
+        for (string str : words)
+        {
+            if (str.size() != word_length)
+            {
+                return {};
+            }
+        }
+
+        //首先建立words的映射关系
+        unordered_map<string, int> map;
+        //遍历words，进行关系的建立
+        for (string str : words)
+        {
+            map[str]++;
+        }
+
+        //现在我们开始进行匹配
+        //建立滑动窗口，对s串进行遍历
+        for (int i = 0; i <= len - words_count * word_length; ++i)
+        {
+            // 我们需要再建立一个map,用来记录每次匹配的结果
+            unordered_map<string, int>   tmpmap = map;
+            /*
+             用来计算匹配成功的子串的个数
+             如果count的值小于words的总个数的时候，就表示此次匹配失败
+             如果count的值等于words的个数的时候，表示此次匹配成功
+            */
+            int count = 0;
+            int  j = i;
+            while (count< words_count)
+            {
+                //从j位置截取每个单词长度的子串
+                string str = s.substr(j, word_length);
+                //如果str不在map中，就直接退出
+                if (tmpmap.count(str) == 0 || tmpmap[str] == 0)
+                {
+                    break;
+                }
+                tmpmap[str]--;
+                j += word_length;
+                count += 1;
+            }
+            //跳出while循环有两种情况
+            //1.break调退出
+            //2.找完了
+            if (count == words_count)
+            {
+                //表示找到了
+                res.push_back(i);
+            }
+        }
+        return res;
+    }

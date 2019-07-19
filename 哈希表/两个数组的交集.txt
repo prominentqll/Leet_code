@@ -1,0 +1,47 @@
+***********************************************************************
+题目描述：
+给定两个数组，编写一个函数来计算它们的交集。
+
+示例 1:
+
+输入: nums1 = [1,2,2,1], nums2 = [2,2]
+输出: [2]
+示例 2:
+
+输入: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+输出: [9,4]
+
+解题思路：
+- 将第一个数组中的数字放进set中
+- 再将第二个数组中的数组放之前判断myset中是否已经有该数字
+- 如果有该数字，则说明这就是两个数组的交集
+************************************************************************
+
+代码实现：
+  vector<int> intersection(vector<int>& nums1, vector<int>& nums2)
+    {
+        //将第一个数组中的数字放进set中
+        unordered_set<int> myset;
+        unordered_set<int> resset;
+        vector<int> res;
+        for (int i = 0; i < nums1.size(); ++i)
+        {
+            myset.insert(nums1[i]);
+        }
+        //再将第二个数组中的数组放之前判断myset中是否已经有该数字
+        //如果有该数字，则说明这就是两个数组的交集
+        for (int i = 0; i < nums2.size(); ++i)
+        {
+            if (myset.find(nums2[i]) != myset.end())
+            {
+                resset.insert(nums2[i]);
+            }
+        }
+        auto it = resset.begin();
+        while (it != resset.end())
+        {
+            res.push_back(*it);
+            it++;
+        }
+        return res;
+    }

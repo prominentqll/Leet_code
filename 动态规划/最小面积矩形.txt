@@ -1,0 +1,30 @@
+
+解题思路：
+
+********************************************************************************************************
+每次选择两个点看作对角线上的点，然后查找另外两个点是否在points中，            
+如果在，计算构成举行的面积，否则不做处理；
+一开始对于查找另外两个点没有想到好的解决办法，时间复杂度O(N)去查找，参考评论区大佬的解决办法，
+使用set实现O(logN)时间复杂度查找（获得的小启示是，对于优化O(N)到O(logN)的问题，可以考虑使用set或map辅助）
+********************************************************************************************************
+
+
+int minAreaRect(vector<vector<int>>& points) {
+        set<int> st;
+        int minArea = INT_MAX;
+        int trans = 40000;
+        int len = points.size();
+        for(int i=0;i<len;i++){
+            int x1 = points[i][0],y1 = points[i][1];
+            for(int j=0;j<len;j++){
+                int x2 = points[j][0],y2 = points[j][1];
+                if(x1 == x2 || y1 == y2) continue;
+                if((st.find(x1*trans+y2)!=st.end()) && (st.find(x2*trans+y1)!=st.end())){
+                    minArea = min(minArea,abs((x1-x2)*(y1-y2)));
+                }
+            }
+            st.insert(x1*trans+y1);
+        }
+        return (minArea==INT_MAX)?0:minArea;
+    }
+

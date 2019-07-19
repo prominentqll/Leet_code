@@ -1,0 +1,80 @@
+***********************************************************************************************************************************
+题目描述：
+给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。
+
+注意：答案中不可以包含重复的三元组。
+
+例如, 给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+
+满足要求的三元组集合为：
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+
+解题思路：
+- 先对数组进行从小到大升序排序
+- 之后用一个循环（循环范围 0~size-3）先确定一个数
+- 之后设立双指针头尾同时扫描数组右边剩下的数，如果找到两个数和为外层循环中已确定的相反数，那么存入解，并且去除 start 和 end 重复。 
+- 对于外层循环，每一次需要去除从下标 $i$ 开始的数字重复，一是为了去除重复答案。二是可以提高运行效率。
+*************************************************************************************************************************************
+代码实现：
+vector<vector<int>> threeSum(vector<int>& nums)
+  {   
+          vector<vector<int>> vec;//存放最终结果的数组
+          vector<int> result;//每次存放一组符合条件的元素
+           if(nums.size()<3)
+           {
+               return vec;
+           }
+           sort(nums.begin(),nums.end());//首先对数组进行排序
+
+           int sum;
+           for(int i=0;i<nums.size()-2;++i)
+           {
+               int start=i+1;
+               int end=nums.size()-1;
+               int k=-nums[i];//nums[i]为我们在外层循环确定好的一个数
+              
+               while(start<end)
+               {
+                   sum=nums[start]+nums[end];
+                   if(sum==k)
+                   {
+                       result.push_back(nums[i]);
+                       result.push_back(nums[start]);
+                       result.push_back(nums[end]);
+                       vec.push_back(result);
+                       result.clear();
+                       start++;
+                       end--;
+                       //去除start的重复
+                       while(start<end&&nums[start]==nums[start-1])
+                       {
+                           start++;
+                       }
+                       //去除end的重复
+                       while(start<end&&nums[end]==nums[end+1])
+                       {
+                           end--;
+                       }
+                   }
+                   else if(sum<k)
+                   {
+                       start++;
+                   }
+                   else
+                   {
+                       end--;
+                   }
+               }
+               //去除i的重复
+               while(i<nums.size()-2&&nums[i]==nums[i+1])
+               {
+                   i++;
+               }
+               
+           }
+           return vec;
+       
+   }

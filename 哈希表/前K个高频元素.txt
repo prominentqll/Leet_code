@@ -1,0 +1,43 @@
+***********************************************************************************
+题目描述：
+给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
+
+示例 1:
+
+输入: nums = [1,1,1,2,2,3], k = 2
+输出: [1,2]
+示例 2:
+
+输入: nums = [1], k = 1
+输出: [1]
+
+解题思路：
+使用排序算法对元素按照频率由高到低进行排序，然后再取前 k个元素。
+***********************************************************************************
+ static bool compare(pair<int, int> & p1, pair<int, int> & p2)
+{
+	return p1.second > p2.second;
+}
+vector<int> topKFrequent(vector<int>& nums, int k)
+{
+	vector<pair<int, int>> res;
+	vector<int> vec;
+	unordered_map<int, int> numMap;
+	//vector<int> res;
+	for (int i = 0; i < nums.size(); ++i)
+	{
+		numMap[nums[i]]++;
+	}
+	auto it = numMap.begin();
+	while (it != numMap.end())
+	{
+		res.push_back(make_pair(it->first, it->second));
+		++it;
+	}
+	sort(res.begin(), res.end(), compare);
+	for (int i = 0; i < k; ++i)
+	{
+		vec.push_back(res[i].first);
+	}
+	return vec;
+	}

@@ -1,0 +1,43 @@
+*********************************************************************
+题目描述：
+给定不同面额的硬币 coins 和一个总金额 amount。
+编写一个函数来计算可以凑成总金额所需的最少的硬币个数。
+如果没有任何一种硬币组合能组成总金额，返回 -1。
+示例 1:
+
+输入: coins = [1, 2, 5], amount = 11
+输出: 3 
+解释: 11 = 5 + 5 + 1
+示例 2:
+
+输入: coins = [2], amount = 3
+输出: -1
+
+
+解题思路：
+比较典型的动态规划问题。
+
+假设 f(n) 代表要凑齐金额为 n 所要用的最少硬币数量，那么有：
+f(n) = min(f(n - c1), f(n - c2), ... f(n - cn)) + 1
+其中 c1 ~ cn 为硬币的所有面额。
+**********************************************************************
+代码实现：
+ int coinChange(vector<int>& coins, int amount){
+        sort(coins.begin(),coins.end());//这里先排序，可以在循环中提前跳出，略过一些不满足的情况，提高效率
+        vector<int> dp(amount+1,-1);
+        dp[0]=0;
+        for(int i=1;i<=amount;++i)
+        {
+            int mincoin=INT_MAX;//注意，这里需要通过循环，历遍可能情况，然后找出最小值，不能自以为更换为面值更大的就可以用更少的硬币
+            for(int value:coins)
+            {
+                if(i-value<0) break;
+                if(i-value>=0 && dp[i-value]>=0)
+                {
+                    mincoin=mincoin<dp[i-value]+1?mincoin:dp[i-value]+1;
+                }
+            }
+            if(mincoin!=INT_MAX) dp[i]=mincoin;
+        }
+        return dp[amount];
+    }

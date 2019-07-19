@@ -1,0 +1,63 @@
+********************************************************************************
+题目描述：
+给定一个非负整数数组 A， A 中一半整数是奇数，一半整数是偶数。
+对数组进行排序，以便当 A[i] 为奇数时，i 也是奇数；当 A[i] 为偶数时， i 也是偶数。
+你可以返回任何满足上述条件的数组作为答案。
+
+示例：
+
+输入：[4,2,5,7]
+输出：[4,5,2,7]
+解释：[4,7,2,5]，[2,5,4,7]，[2,7,4,5] 也会被接受。
+
+提示：
+2 <= A.length <= 20000
+A.length % 2 == 0
+0 <= A[i] <= 1000
+
+
+解题思路：
+这道题我们只要使用两个指针evenPtr、oddPtr
+oddPtr扫描奇数下标、evenPtr扫描偶数下标。
+左移evenPtr，直到A[evenPtr]和evenPtr奇偶性不相同，
+左移oddPtr，直到A[oddPtr]和oddPtr奇偶性不相同，
+这时交换A[evenPtr]和A[oddPtr]即可。
+重复此步骤，直到到达左端。
+**********************************************************************************
+
+
+代码实现：
+vector<int> sortArrayByParityII(vector<int>& A)
+{
+	int len = A.size();
+	if (len == 0)
+	{
+		return A;
+	}
+	//定义两个指针，一个指向奇数下标，一个指向偶数下标
+	int evenptr = len - 2;//指向偶数下标
+	int oddptr = len - 1;//指向计数下标
+	while (evenptr >= 0 && oddptr > 0)
+	{
+		//跳过偶数下标中A[i]是偶数的位置
+		while (evenptr >= 0 && A[evenptr] % 2 == 0)
+		{
+			evenptr -= 2;
+		}
+		//跳过计数下标中A[i]是奇数的位置
+		while (oddptr > 0 && A[oddptr] % 2 == 1)
+		{
+			oddptr -= 2;
+		}
+		if (evenptr >= 0 && oddptr > 0)
+		{
+			swap(A[oddptr], A[evenptr]);
+			evenptr -= 2;
+			oddptr -= 2;
+		}
+	}
+	return A;
+}
+
+
+

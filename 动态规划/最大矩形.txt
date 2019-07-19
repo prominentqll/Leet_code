@@ -1,0 +1,58 @@
+************************************************************************************
+问题描述：
+给定一个仅包含 0 和 1 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。
+
+示例:
+
+输入:
+[
+  ["1","0","1","0","0"],
+  ["1","0","1","1","1"],
+  ["1","1","1","1","1"],
+  ["1","0","0","1","0"]
+]
+输出: 6
+
+解题思路：
+
+我们可以将这个问题转化为之前的那个问题(leetcode84)
+也就是我们将此时输入矩阵的每一行以上的所有行看成是一个柱状图。
+
+1.首先对第一行求一个最大体积，然后到第二行，将第一行的值累加到第二行上，
+2.但是有一个前提条件，如果第二行某一列的值是0，那就直接是0了，
+3.比方说第二行累加后的值为2,0,2,1,1，然后对这个值求一次最大体积。
+4.第三行累加后的值为3,1,3,2,2，第四行累加后的值为4,0,0,3,0
+**********************************************************************************
+代码实现：
+//核心算法，递增栈
+    int largestRectangleArea(vector<int> &height) {
+        int res = 0;
+        stack<int> s;
+        height.push_back(0);
+        for (int i = 0; i < height.size(); ++i) {
+            while(!s.empty()&&height[s.top()]>height[i])
+            {
+                int length=height[s.top()];
+                s.pop();
+                int width=s.empty()?i:i-s.top()-1;
+                res=max(res,length*width);
+            }
+             s.push(i);
+            
+        }
+        return res;
+    }
+    
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int res = 0;
+        vector<int> height;
+        //它这里是按行进行压缩
+        for (int i = 0; i < matrix.size(); ++i) {
+            height.resize(matrix[i].size());
+            for (int j = 0; j < matrix[i].size(); ++j) {
+                height[j] = matrix[i][j] == '0' ? 0 : (1 + height[j]);
+            }
+            res = max(res, largestRectangleArea(height));
+        }
+        return res;
+    }

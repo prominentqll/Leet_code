@@ -1,0 +1,79 @@
+*********************************************************************************
+题目描述：
+将一个给定字符串根据给定的行数，以从上往下、从左到右进行 Z 字形排列。
+
+比如输入字符串为 "LEETCODEISHIRING" 行数为 3 时，排列如下：
+
+L   C   I   R
+E T O E S I I G
+E   D   H   N
+之后，你的输出需要从左往右逐行读取，产生出一个新的字符串，比如："LCIRETOESIIGEDHN"。
+
+解决思路：
+1.当空字符或者只有一个字符的时候直接输出字符;
+2.P    A   H   N  
+  A P  L S I I G                                                  
+  Y    I   R
+按如图所示的颜色将字符分组，每一组字符长度num1=numRows*2-2
+总共可以分几组num=s.size()/num1或者num=s.size()/num1+1
+*****************************************************************************************
+
+代码实现：
+string convert(string s, int numRows)
+{
+	string res;
+	int groupl = numRows * 2 - 2;//groupl表示每个分组的长度
+	if (s.size() < 2 || groupl == 0)
+	{
+		res = s;
+		return res;
+	}
+	int num = s.size() / groupl + 1;//num表示分组个数
+	if (s.size() < 2 || groupl == 0)
+	{
+		res = s;
+		return res;
+	}
+	if (s.size() % groupl == 0)
+	{
+		num = s.size() / groupl;
+	}
+	// 首先进行分组，并将分组结果保存
+	vector<string> vec(num);
+	int k = 0;
+	int count = 0;
+	for (int i = 0; i < s.size(); ++i)
+	{
+		if (count == groupl)//表示一个组已经分完
+		{
+			count = 0;
+			k++;
+		}
+		vec[k].push_back(s[i]);
+		count++;
+	}
+
+	//将每个分组的首元素添加到结果中
+	for (int i = 0; i < num; ++i)
+	{
+		res.push_back(vec[i][0]);
+	}
+
+	//处理其他元素
+	for (int m = 1; m < numRows; ++m)//m:处理每一行
+	{
+		for (int n = 0; n < num; ++n)//n:处理每一组
+		{
+			if (m < vec[n].size())
+			{
+				res.push_back(vec[n][m]);
+			}
+			if ((groupl - m) < vec[n].size() && (groupl - m) != m)
+			{
+				res.push_back(vec[n][groupl - m]);
+			}
+		}
+	}
+	return res;
+}
+

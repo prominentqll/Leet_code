@@ -1,0 +1,126 @@
+***********************************************************************************************************************
+题目描述：
+给定一个包含 m x n 个元素的矩阵（m 行, n 列），请按照顺时针螺旋顺序，返回矩阵中的所有元素。
+示例 1:
+
+输入:
+[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+输出: [1,2,3,6,9,8,7,4,5]
+示例 2:
+
+输入:
+[
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
+  [9,10,11,12]
+]
+输出: [1,2,3,4,8,12,11,10,9,5,6,7]
+
+解题思路：
+首先考虑最简单的情况，如图我们先找最外面这圈X，
+这种情况下我们是第一行找前4个，最后一列找前4个，最后一行找后4个，第一列找后4个，
+这里我们可以发现，第一行和最后一行，第一列和最后一列都是有对应关系的。
+即对i行，其对应行是m - i - 1，对于第j列，其对应的最后一列是n - j - 1。
+
+
+XXXXX
+XOOOX
+XOOOX
+XOOOX
+XXXXX
+
+
+然后进入到里面那一圈，同样的顺序没什么问题，
+然而关键在于下图这么两种情况，一圈已经没有四条边了，
+所以我们要单独处理，只加那唯一的一行或一列。
+另外，根据下图我们可以发现，圈数是宽和高中较小的那个，加1再除以2。
+
+OOOOO  OOO
+OXXXO  OXO
+OOOOO  OXO
+       OXO
+       OOO
+******************************************************************************************************************
+代码实现：
+vector<int> spiralOrder(vector<vector<int>>& matrix)
+{
+	int m = matrix.size();// m行
+	if (m == 0)
+	{
+		return {};
+	}
+	int n = matrix[0].size();//n列
+	vector<int>  result;
+	int k = (min(m, n) + 1) / 2;//循环的圈数
+	for (int i = 0; i < k; ++i)
+	{
+		int lastrow = m - 1 - i;//计算该圈对应的最后一行
+		int lastcol = n - 1 - i;//计算对应的最后一列
+
+		//需要判断最后只剩一行或一列的情况
+		if (i == lastrow)//只剩最后一行
+		{
+			for (int j = i; j <= lastcol; ++j)
+			{
+				result.push_back(matrix[i][j]);
+			}
+		}
+		if (i == lastcol)//只剩最后一列
+		{
+			for (int j = i; j <= lastrow; ++j)
+			{
+				result.push_back(matrix[j][i]);
+			}
+		}
+		else
+		{
+			//处理第一行
+			for (int j = i; j < lastcol; ++j)
+			{
+				result.push_back(matrix[i][j]);
+			}
+			//处理最后一列
+			for (int j = i; j < lastrow; ++j)
+			{
+				result.push_back(matrix[j][lastcol]);
+			}
+			//处理最后一行
+			for (int j = lastcol; j > i; --j)
+			{
+				result.push_back(matrix[lastrow][j]);
+			}
+			//处理第一列
+			for (int j = lastrow; j >i; --j)
+			{
+				result.push_back(matrix[j][i]);
+			}
+		}
+	}
+	return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

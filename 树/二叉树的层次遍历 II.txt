@@ -1,0 +1,60 @@
+**********************************************************************************************************************
+题目描述：
+给定一个二叉树，返回其节点值自底向上的层次遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+
+例如：
+给定二叉树 [3,9,20,null,null,15,7],
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回其自底向上的层次遍历为：
+
+[
+  [15,7],
+  [9,20],
+  [3]
+]
+解题思路：
+首先按照自上而下的顺序进行层次遍历
+将该结果进行逆置即可
+************************************************************************************************************************
+代码实现：
+  vector<vector<int>> levelOrderBottom(TreeNode* root) {
+	vector<vector<int>> res;
+	if (root == nullptr)
+	{
+		return res;
+	}
+	queue<TreeNode *> que;
+	que.push(root);
+	//层次遍历
+	while (!que.empty())
+	{
+		vector<int> vec;
+		int size = que.size();
+		for (int i = 0; i < size; ++i)
+		{
+            TreeNode *cur=que.front();
+			vec.push_back(cur->val);
+			que.pop();
+            if (cur->left != nullptr)
+            {
+                que.push(cur->left);
+            }
+            if (cur->right != nullptr)
+            {
+                que.push(cur->right);
+            }
+		}
+		res.push_back(vec);
+		vec.clear();
+		
+	}
+	//结果进行逆置
+	reverse(res.begin(), res.end());
+	return res;
+
+}

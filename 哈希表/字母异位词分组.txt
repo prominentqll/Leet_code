@@ -1,0 +1,46 @@
+*******************************************************************************************
+题目描述：
+给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
+
+示例:
+输入: 
+["eat", "tea", "tan", "ate", "nat", "bat"]
+
+输出:
+[
+  ["ate","eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+
+解题思路：
+* 由于错位词重新排序后都会得到相同的字符串
+* 我们以此作为key，将所有错位词都保存到字符串数组中
+* 建立key和字符串数组之间的映射，最后再存入结果res中
+********************************************************************************************
+
+代码实现：
+vector<vector<string>> groupAnagrams(vector<string>& strs)
+{
+	vector<vector<string>> res;
+	unordered_map<string, vector<string>> mymap;
+	int size = strs.size();
+	if (size == 0)
+	{
+		return res;
+	}
+	for (string str : strs)
+	{
+		string  t = str;
+		sort(t.begin(), t.end());
+		mymap[t].push_back(str);
+	}
+	auto it = mymap.begin();
+	while (it != mymap.end())
+	{
+		res.push_back(it->second);
+		it++;
+	}
+	return res;
+}
+
