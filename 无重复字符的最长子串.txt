@@ -1,0 +1,26 @@
+/*
+i指向结尾子串的结尾处，而j则指向开头处，即子串第一个字符。
+这里利用的是i和j的单调性，如果i向后移动一位，那么j则不动或者向后移动。
+因为i向后移动代表子串延长了一位，如果新的字符是原子串中出现过的字符，那么就将j向后移动，直到遇到同样的字符将其删去即可。
+如果新的字符是原子串中没有出现过的字符，那么j就不用移动。由此可以看到i和j是具有单调性的。
+*/
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int len=s.length();
+        vector<int> vec(128);
+        int result=0;
+        int j=0;
+        for(int i=0;i<len;++i)
+        {
+            vec[s[i]]++;
+            while(vec[s[i]]>1)
+            {
+                vec[s[j]]--;
+                j++;
+            }
+            result=max(result,i-j+1);
+        }
+        return result;
+    }
+};

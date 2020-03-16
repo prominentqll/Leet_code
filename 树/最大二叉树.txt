@@ -1,4 +1,4 @@
-***************************************************************************************
+**********************************************************************************
 题目描述：
 给定一个不含重复元素的整数数组。一个以此数组构建的最大二叉树定义如下：
 
@@ -7,30 +7,26 @@
 右子树是通过数组中最大值右边部分构造出的最大二叉树。
 通过给定的数组构建最大二叉树，并且输出这个树的根节点。
 
-Example 1:
+ 
 
-输入: [3,2,1,6,0,5]
-输入: 返回下面这棵树的根节点：
+示例 ：
+
+输入：[3,2,1,6,0,5]
+输出：返回下面这棵树的根节点：
 
       6
     /   \
    3     5
     \    / 
      2  0   
-       \
-        1
-注意:
-
-给定的数组的大小在 [1, 1000] 之间。
-
 解题思路：
-1.首先找数组中最大的元素作为根节点
-2.根据题意，根节点的左子树在最大元素的左边
-3.根节点的右子树在最大元素的右边
-4.我们就可以将区间以该最大元素为分界点进行划分
-****************************************************************************************
+首先，在整个数组中找到最大的值作为根节点
+该节点将数组分为左右两部分
+在左部分构造根节点的左子树
+在右部分构造根节点的右子树
+**********************************************************************************
 代码实现：
-TreeNode* constructMaximumBinaryTree(vector<int>& nums,int start,int end)
+ TreeNode* constructMaximumBinaryTree(vector<int>& nums,int start,int end)
     {
         if(start>end)
         {
@@ -40,15 +36,15 @@ TreeNode* constructMaximumBinaryTree(vector<int>& nums,int start,int end)
         int index=start;
         for(int i=start+1;i<=end;++i)
         {
-            if(nums[i]>max)
+            if(nums[i]>max)//找最大值
             {
                 max=nums[i];
                 index=i;
             }
         }
-        TreeNode *root=new TreeNode(max);
-        root->left=constructMaximumBinaryTree(nums,start,index-1);
-        root->right=constructMaximumBinaryTree(nums,index+1,end);
+        TreeNode *root=new TreeNode(max);//最大值作为根节点
+        root->left=constructMaximumBinaryTree(nums,start,index-1);//左子树在最大值的左边
+        root->right=constructMaximumBinaryTree(nums,index+1,end);//右子树在最大值的右边
         return root;
     }
 

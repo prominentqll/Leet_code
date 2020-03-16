@@ -1,0 +1,44 @@
+******************************************************************
+题目描述：
+给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+ 
+
+示例:
+
+给定 1->2->3->4, 你应该返回 2->1->4->3.
+
+解题思路：
+四个指针
+start用来表示要交换部分的首结点
+end用来表示要交换部分的尾结点
+pre用来表示已交换部分的尾节点
+next用来表示未交换部分的首结点
+*********************************************************************
+代码实现：
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+         ListNode *start=head;//要交换部分的首结点
+         ListNode *pre=new ListNode(0);//已交换部分的尾结点
+         pre->next=head;
+        while(start!=nullptr&&start->next!=nullptr)
+        {
+           
+            ListNode *end=start->next;//要交换部分的首结点
+            ListNode *next=end->next;//未交换部分的首结点
+            end->next=start;//第二个结点指向第一个结点
+            start->next=next;//第一个结点指向未交换部分的首结点
+            if(start==head)//交换前两个结点，需要更新头结点
+            {
+                head=end;
+            }
+            pre->next=end;//将交换后的第一个结点与已交换部分的后一个结点进行连接
+            pre=start;//已交换部分的最后一个结点
+            start=next;//下一个要交换的首结点
+        }
+        return head;
+    }
+};

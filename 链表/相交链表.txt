@@ -1,0 +1,57 @@
+**********************************************************************
+题目描述：
+编写一个程序，找到两个单链表相交的起始节点。
+解题思路：
+- 让两个链表从同距离末尾同等距离的位置开始遍历。
+- 这个位置只能是较短链表的头结点位置，我们必须计算两个链表的长度差
+- 指针 l1 始终指向较长的链表，指针 l2指向较短的链表，依次往后遍历
+************************************************************************
+代码实现：
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        //首先计算两链表的长度
+        int len1=0;
+        int len2=0;
+        ListNode *l1=headA;
+        ListNode *l2=headB;
+        while(l1!=nullptr)
+        {
+            len1++;
+            l1=l1->next;
+        }
+        while(l2!=nullptr)
+        {
+            len2++;
+            l2=l2->next;
+        }
+        int k=0;
+        if(len1>len2)
+        {
+            k=len1-len2;
+            l1=headA;
+            l2=headB;
+        }
+        else
+        {
+            k=len2-len1;
+            l1=headB;
+            l2=headA;
+        }
+        while(k--)
+        {
+            l1=l1->next;
+        }
+        while(l1!=nullptr&&l2!=nullptr)
+        {
+            if(l1==l2)
+            {
+                return l1;
+            }
+            l1=l1->next;
+            l2=l2->next;
+        }
+        return nullptr;
+        
+        
+        
+        
+    }

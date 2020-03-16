@@ -1,0 +1,47 @@
+题目描述：
+给定一个链表和一个特定值 x，对链表进行分隔，使得所有小于 x 的节点都在大于或等于 x 的节点之前。
+
+你应当保留两个分区中每个节点的初始相对位置。
+
+示例:
+
+输入: head = 1->4->3->2->5->2, x = 3
+输出: 1->2->2->4->3->5
+
+解题思路：
+- 创建两个链表：其中一个包括全部值小于x的元素，另一个包括全部值大于x的元素。
+- 我们可以用两个指针 tmp1 和tmp2来追踪上述的两个链表。
+- 两个指针可以用于分别创建两个链表
+- 然后将这两个链表连接即可获得所需的链表。
+代码实现：
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        if(head==nullptr)
+        {
+            return head;
+        }
+        ListNode *list1=new ListNode(0);
+        ListNode *tmp1=list1;
+        ListNode *list2=new ListNode(1);
+        ListNode *tmp2=list2;
+        while(head)
+        {
+            if(head->val<x)//list1存放值小于x的节点
+            {
+                tmp1->next=head;
+                tmp1=tmp1->next;
+            }
+            else
+            {
+                tmp2->next=head;//list2存放值大于x的节点
+                tmp2=tmp2->next;
+            }
+            head=head->next;
+        }
+        tmp2->next=nullptr;
+        tmp1->next=list2->next;//两个链表进行连接
+        return list1->next;
+        
+    }
+};
